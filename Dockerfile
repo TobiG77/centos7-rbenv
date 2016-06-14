@@ -27,8 +27,13 @@ RUN yum -y install --setopt=tsflags=nodocs epel-release && \
 RUN adduser -U -m $RBENV_USER
 
 RUN su -lc 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv && cd ~/.rbenv && src/configure && make -C src' $RBENV_USER
-RUN su -lc 'echo "export PATH=\"$HOME/.rbenv/bin:$PATH\"" >> ~/.bash_profile' $RBENV_USER
+RUN su -lc 'echo "export PATH=$HOME/.rbenv/bin:$PATH" >> ~/.bash_profile' $RBENV_USER
+RUN su -c "echo 'eval \"\$(rbenv init -)\"' >> ~/.bash_profile" $RBENV_USER
 RUN su -lc 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build' $RBENV_USER
+
+RUN su -lc 'echo "install: --no-document" > ~/.gemrc' $RBENV_USER
+RUN su -lc 'echo "update: --no-document" >> ~/.gemrc' $RBENV_USER
+
 RUN su -lc "rbenv install $RUBY_VERSION" $RBENV_USER
 RUN su -lc "rbenv install jruby-$JRUBY_VERSION ||:" $RBENV_USER
 
