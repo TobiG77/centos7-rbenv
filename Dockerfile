@@ -2,9 +2,10 @@ FROM centos:centos7
 
 MAINTAINER Tobias Gerschner <tobias.gerschner@gmail.com>
 
-ENV RUBY_VERSION 2.3.1
-ENV JRUBY_VERSION 9.1.2.0
+ENV RUBY_VERSION 2.3.4
+ENV JRUBY_VERSION 9.1.9.0
 ENV RBENV_USER developer
+ENV WORKDIR /opt/source
 
 RUN yum -y install --setopt=tsflags=nodocs epel-release && \
     yum -y update && \
@@ -36,5 +37,9 @@ RUN su -lc 'echo "update: --no-document" >> ~/.gemrc' $RBENV_USER
 
 RUN su -lc "rbenv install $RUBY_VERSION" $RBENV_USER
 RUN su -lc "rbenv install jruby-$JRUBY_VERSION ||:" $RBENV_USER
+RUN su -lc "rbenv shell $RUBY_VERSION && gem install bundler" $RBENV_USER
+RUN su -lc "rbenv shell jruby-$JRUBY_VERSION && gem install bundler" $RBENV_USER
+
+EXPOSE 3000
 
 CMD [ "/bin/su", "--login", "developer" ]
