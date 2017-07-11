@@ -2,8 +2,8 @@ FROM centos:centos7
 
 MAINTAINER Tobias Gerschner <tobias.gerschner@gmail.com>
 
-ENV RUBY_VERSION 2.3.4
-ENV JRUBY_VERSION 9.1.9.0
+ENV RUBY_VERSION 2.4.1
+ENV JRUBY_VERSION 9.1.12.0
 ENV RBENV_USER developer
 ENV WORKDIR /opt/source
 
@@ -23,6 +23,9 @@ RUN yum -y install --setopt=tsflags=nodocs epel-release && \
     wget \
     which \
     zlib-devel \
+    postgresql-devel \
+    mariadb-devel \
+    sqlite-devel \
     && yum clean all
 
 RUN adduser -U -m $RBENV_USER
